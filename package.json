@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "engines": {
+    "node": ">=24.11.0 <25",
+    "npm": ">=11.6.1"
+  },
+  "scripts": {
+    "dev": "node site-build/run.ts dev",
+    "build": "tsc && node site-build/run.ts build"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "htmx.org": "^2.0.10",
+    "marked": "^18.0.9",
+    "sitemap": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
+  }
+}
