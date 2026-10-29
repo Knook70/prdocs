@@ -6,3 +6,6 @@ dist/
 
 #dev tools
 /.serena/
+
+# documents
+src/documents/**/_*.md

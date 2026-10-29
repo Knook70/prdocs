@@ -9,5 +9,5 @@
     "verbatimModuleSyntax": true,
     "types": ["node", "vite/client"]
   },
-  "include": ["src/**/*.ts", "site-build/**/*.ts"]
+  "include": ["src/**/*.ts", "types/prdocs.config.types.ts"]
 }
