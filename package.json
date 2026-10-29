@@ -1,16 +1,17 @@
 {
+  "name": "prdocs",
   "type": "module",
   "engines": {
     "node": ">=24.11.0 <25",
     "npm": ">=11.6.1"
   },
   "scripts": {
-    "dev": "node site-build/run.ts dev",
-    "build": "tsc && node site-build/run.ts build"
+    "dev": "node src/site-build/run.ts dev",
+    "build": "tsc && node src/site-build/run.ts build",
+    "pr:check": "node src/scripts/pr/run.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "htmx.org": "^2.0.10",
     "marked": "^18.0.9",
     "sitemap": "^9.0.1"
   },
