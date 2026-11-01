@@ -1,0 +1,10 @@
+name: Validation counterfeit check
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  counterfeit:
+    name: PR Check
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'This deliberately does not run policy checks.'
