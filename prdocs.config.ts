@@ -33,11 +33,11 @@ const config = {
     },
     kinds: {
       documents: {
-        option: "--docs",
+        autoCommitMessage: "docs: update source documents",
         prBranchPrefix: "docs/",
       },
       development: {
-        option: "--dev",
+        autoCommitMessage: "dev: update project",
         prBranchPrefix: "dev/",
       },
     },

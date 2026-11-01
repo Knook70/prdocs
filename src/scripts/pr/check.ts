@@ -1,27 +1,22 @@
 import { extname, join } from "node:path";
-import type { PolicyViolationData } from "../../violation.ts";
+import { PolicyViolation, type PolicyViolationData } from "../../violation.ts";
 import config from "../../../prdocs.config.ts";
-import type { PRChange } from "./context.ts";
+import { prContext, type PRChange } from "./context.ts";
 
 export type PullRequestCheckContext = Readonly<{
-  branch: string;
   localRevision: string;
   sourceRevision: string;
-  prBranchPrefix: string;
+  workingTreeChanges: string;
 }>;
 
 export type PullRequestCheck = (
   context: PullRequestCheckContext,
 ) => readonly string[];
 
-function checkPRBranch(
-  context: PullRequestCheckContext,
-): readonly string[] {
-  return context.branch.startsWith(context.prBranchPrefix)
-    ? []
-    : [
-        `The PR Branch ${JSON.stringify(context.branch)} must start with ${JSON.stringify(context.prBranchPrefix)}. Switch to or create a matching PR Branch, then rerun Pull Request Check.`,
-      ];
+function checkWorkingTree(context: PullRequestCheckContext): readonly string[] {
+  return context.workingTreeChanges
+    ? ["Commit all changes before checking the pull request, or run npm run pr to commit them interactively."]
+    : [];
 }
 
 function checkBaseRevision(
@@ -41,7 +36,7 @@ function checkBaseRevision(
 }
 
 export const pullRequestChecks: readonly PullRequestCheck[] = [
-  checkPRBranch,
+  checkWorkingTree,
   checkBaseRevision,
 ];
 
@@ -92,7 +87,37 @@ function checkExtension(
   }));
 }
 
+function checkRegularFiles(context: DocumentPRCheckContext): readonly PolicyViolationData[] {
+  return context.changes
+    .filter(({ status, mode }) => status !== "D" && mode !== "100644" && mode !== "100755")
+    .map(({ path }) => ({ message: "Source Documents must be regular files.", path }));
+}
+
 export const documentPRChecks: readonly DocumentPRCheck[] = [
   checkPath,
   checkExtension,
+  checkRegularFiles,
 ];
+
+try {
+  if (process.argv.length > 2) throw new Error("Run npm run pr:check without options.");
+  prContext.getAcceptedPRKind();
+  const context = {
+    localRevision: prContext.getPRBaseRevision(),
+    sourceRevision: prContext.getSourceRepositoryBaseRevision(),
+    workingTreeChanges: prContext.getWorkingTreeChanges(),
+  };
+  const failures = pullRequestChecks.flatMap((check) => check(context));
+  if (failures.length) throw new Error(failures.join("\n\n"));
+
+  const headRevision = prContext.getPRHeadRevision();
+  const documentContext = {
+    login: prContext.getGithubLogin(),
+    changes: prContext.getPRChanges(context.localRevision, headRevision),
+  };
+  const violations = documentPRChecks.flatMap((check) => check(documentContext));
+  if (violations.length) throw new PolicyViolation(violations);
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exitCode = 1;
+}

@@ -31,11 +31,11 @@ export type PrdocsConfig = Readonly<{
     }>;
     kinds: Readonly<{
       documents: Readonly<{
-        option: string;
+        autoCommitMessage: string;
         prBranchPrefix: string;
       }>;
       development: Readonly<{
-        option: string;
+        autoCommitMessage: string;
         prBranchPrefix: string;
       }>;
     }>;

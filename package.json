@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node src/site-build/run.ts dev",
     "build": "tsc && node src/site-build/run.ts build",
-    "pr:check": "node src/scripts/pr/run.ts"
+    "pr:check": "npm run build && node src/scripts/pr/check.ts",
+    "pr": "node src/scripts/pr/submit.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
