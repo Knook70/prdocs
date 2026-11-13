@@ -5,6 +5,7 @@
     "node": ">=24.11.0 <25",
     "npm": ">=11.6.1"
   },
+  "version": "0.2.0",
   "scripts": {
     "dev": "node src/site-build/run.ts dev",
     "build": "tsc && node src/site-build/run.ts build",
@@ -21,6 +22,5 @@
     "@types/node": "^24.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.1"
-  },
-  "version": "0.1.0"
+  }
 }
