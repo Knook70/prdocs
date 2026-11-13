@@ -33,11 +33,9 @@ const config = {
     },
     kinds: {
       documents: {
-        option: "--docs",
         prBranchPrefix: "docs/",
       },
       development: {
-        option: "--dev",
         prBranchPrefix: "dev/",
       },
     },

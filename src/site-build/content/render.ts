@@ -27,7 +27,13 @@ export async function renderDocument(sourcePath: string): Promise<string> {
     "utf8",
   );
   const defaults = config.build.document.defaults;
-  const { data, content } = matter(markdown);
+  const { data, content } = matter(markdown, {
+    engines: {
+      javascript() {
+        throw new Error("Executable frontmatter is not supported.");
+      },
+    },
+  });
 
   const slots = new Map<string, string>([
     ["language", escapeHtml(String(data.lang ?? defaults.language))],

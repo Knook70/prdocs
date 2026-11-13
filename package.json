@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "node src/site-build/run.ts dev",
     "build": "tsc && node src/site-build/run.ts build",
-    "pr:check": "node src/scripts/pr/run.ts"
+    "pr:check": "node scripts/pr/check.ts",
+    "pr": "npm run pr:check && node scripts/pr/submit.ts",
+    "test:types": "tsc -p test/tsconfig.json"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -19,5 +21,6 @@
     "@types/node": "^24.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.1"
-  }
+  },
+  "version": "0.1.0"
 }

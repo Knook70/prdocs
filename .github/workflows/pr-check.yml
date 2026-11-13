@@ -1,0 +1,35 @@
+name: Pull Request Check
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: PR Check
+    runs-on: ubuntu-24.04
+    env:
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PR_AUTHOR_LOGIN: ${{ github.event.pull_request.user.login }}
+      PR_HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - run: npm run pr:check
+        env:
+          GH_TOKEN: ${{ github.token }}

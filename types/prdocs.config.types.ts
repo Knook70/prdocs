@@ -31,11 +31,9 @@ export type PrdocsConfig = Readonly<{
     }>;
     kinds: Readonly<{
       documents: Readonly<{
-        option: string;
         prBranchPrefix: string;
       }>;
       development: Readonly<{
-        option: string;
         prBranchPrefix: string;
       }>;
     }>;
